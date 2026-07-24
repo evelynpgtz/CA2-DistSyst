@@ -1,0 +1,47 @@
+syntax = "proto3";
+
+package waterconsumption;
+
+option java_multiple_files = true;
+option java_package = "com.evelyn.proto.waterconsumption";
+option java_outer_classname = "WaterConsumptionProto";
+
+service WaterConsumptionService {
+
+    rpc GetConsumption (ConsumptionRequest) returns (ConsumptionResponse);
+
+    rpc UploadConsumptionRecords (stream ConsumptionRecord) returns (ConsumptionSummary);
+
+}
+
+message ConsumptionRequest {
+
+    string householdId = 1;
+
+}
+
+message ConsumptionResponse {
+
+    double totalLitres = 1;
+
+    string lastUpdated = 2;
+
+}
+
+message ConsumptionRecord {
+
+    string householdId = 1;
+
+    double litres = 2;
+
+    string timestamp = 3;
+
+}
+
+message ConsumptionSummary {
+
+    int32 recordsReceived = 1;
+
+    double totalConsumption = 2;
+
+}
