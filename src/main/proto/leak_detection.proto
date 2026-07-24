@@ -1,0 +1,47 @@
+syntax = "proto3";
+
+package leakdetection;
+
+option java_multiple_files = true;
+option java_package = "com.evelyn.proto.leakdetection";
+option java_outer_classname = "LeakDetectionProto";
+
+service LeakDetectionService {
+
+    rpc ReportLeak (LeakRequest) returns (LeakResponse);
+
+    rpc LiveLeakMonitoring (stream LeakUpdate) returns (stream LeakAlert);
+
+}
+
+message LeakRequest {
+
+    string location = 1;
+
+    int32 severity = 2;
+
+}
+
+message LeakResponse {
+
+    string leakId = 1;
+
+    string status = 2;
+
+}
+
+message LeakUpdate {
+
+    string location = 1;
+
+    int32 severity = 2;
+
+}
+
+message LeakAlert {
+
+    string message = 1;
+
+    string recommendation = 2;
+
+}
