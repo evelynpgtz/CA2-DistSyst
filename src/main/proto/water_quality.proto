@@ -1,0 +1,55 @@
+syntax = "proto3";
+
+package waterquality;
+
+option java_multiple_files = true;
+option java_package = "com.evelyn.proto.waterquality";
+option java_outer_classname = "WaterQualityProto";
+
+service WaterQualityService {
+
+    rpc GetCurrentQuality (QualityRequest) returns (QualityResponse);
+
+    rpc UpdateQuality (QualityData) returns (UpdateResponse);
+
+    rpc StreamQualityUpdates (QualityRequest) returns (stream QualityResponse);
+
+}
+
+message QualityRequest {
+
+    string sensorId = 1;
+
+}
+
+message QualityData {
+
+    string sensorId = 1;
+
+    double phLevel = 2;
+
+    double turbidity = 3;
+
+    double temperature = 4;
+
+    bool safe = 5;
+
+}
+
+message QualityResponse {
+
+    double phLevel = 1;
+
+    double turbidity = 2;
+
+    double temperature = 3;
+
+    bool safe = 4;
+
+}
+
+message UpdateResponse {
+
+    string message = 1;
+
+}
