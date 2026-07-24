@@ -27,7 +27,6 @@ public class WaterQualityServiceImpl extends WaterQualityServiceGrpc.WaterQualit
 
         // Build the gRPC response using the model data.
         QualityResponse response = QualityResponse.newBuilder()
-                .setSensorId(waterQuality.getSensorId())
                 .setPhLevel(waterQuality.getPhLevel())
                 .setTurbidity(waterQuality.getTurbidity())
                 .setTemperature(waterQuality.getTemperature())
