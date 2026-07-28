@@ -3,6 +3,8 @@ package com.evelyn.service;
 import com.evelyn.proto.waterconsumption.ConsumptionRecord;
 import com.evelyn.proto.waterconsumption.ConsumptionSummary;
 import com.evelyn.proto.waterconsumption.WaterConsumptionServiceGrpc;
+import com.evelyn.proto.waterconsumption.ConsumptionRequest;
+import com.evelyn.proto.waterconsumption.ConsumptionResponse;
 import io.grpc.stub.StreamObserver;
 
 /* This class implements the Water Consumption gRPC service.
@@ -67,4 +69,22 @@ public class WaterConsumptionServiceImpl extends WaterConsumptionServiceGrpc.Wat
 
     }
 
+    /* Returns the current water consumption information. */
+    @Override
+    public void getConsumption(ConsumptionRequest request,
+                            StreamObserver<ConsumptionResponse> responseObserver) {
+
+        /* Create a sample response. */
+        ConsumptionResponse response = ConsumptionResponse.newBuilder()
+                .setTotalLitres(2450.75)
+                .setLastUpdated("28/07/2026 10:30")
+                .build();
+
+        /* Send the response to the client. */
+        responseObserver.onNext(response);
+
+        /* Complete the request. */
+        responseObserver.onCompleted();
+
+    }
 }

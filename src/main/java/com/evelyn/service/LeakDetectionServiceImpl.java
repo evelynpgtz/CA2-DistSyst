@@ -2,6 +2,8 @@ package com.evelyn.service;
 
 import com.evelyn.proto.leakdetection.LeakAlert;
 import com.evelyn.proto.leakdetection.LeakUpdate;
+import com.evelyn.proto.leakdetection.LeakRequest;
+import com.evelyn.proto.leakdetection.LeakResponse;
 import com.evelyn.proto.leakdetection.LeakDetectionServiceGrpc;
 import io.grpc.stub.StreamObserver;
 
@@ -51,4 +53,27 @@ public class LeakDetectionServiceImpl extends LeakDetectionServiceGrpc.LeakDetec
 
         }
 
+        /* Reports a leak to the server. */
+        @Override
+        public void reportLeak(LeakRequest request,
+                            StreamObserver<LeakResponse> responseObserver) {
+
+            /* Create the response message. */
+            LeakResponse response = LeakResponse.newBuilder()
+                    .setLeakId("LEAK-001")
+                    .setStatus("Leak reported successfully.")
+                    .build();
+
+            /* Display the received information. */
+            System.out.println("Leak reported:");
+            System.out.println("Location: " + request.getLocation());
+            System.out.println("Severity: " + request.getSeverity());
+
+            /* Send the response to the client. */
+            responseObserver.onNext(response);
+
+            /* Complete the request. */
+            responseObserver.onCompleted();
+
+        }
 }
