@@ -21,6 +21,9 @@ import com.evelyn.proto.waterconsumption.ConsumptionSummary;
 import com.evelyn.proto.leakdetection.LeakRequest;
 import com.evelyn.proto.leakdetection.LeakResponse;
 
+import com.evelyn.proto.leakdetection.LeakUpdate;
+import com.evelyn.proto.leakdetection.LeakAlert;
+
 import javax.jmdns.ServiceInfo;
 
 /* This class creates the gRPC client connection. */
@@ -134,6 +137,15 @@ public class GrpcClient {
 
         /* Send the request to the server. */
         return leakDetectionStub.reportLeak(request);
+
+    }
+
+    /* Starts the bidirectional streaming for leak monitoring. */
+    public StreamObserver<LeakUpdate> startLeakMonitoring(
+            StreamObserver<LeakAlert> responseObserver) {
+
+        /* Start the bidirectional streaming connection. */
+        return leakDetectionAsyncStub.liveLeakMonitoring(responseObserver);
 
     }
 
