@@ -30,6 +30,18 @@ public class WaterQualityServiceImpl extends WaterQualityServiceGrpc.WaterQualit
                         true
                 );
 
+                /* Simulate a slow server response.
+                try {
+
+                TimeUnit.SECONDS.sleep(5);
+
+                } catch (InterruptedException e) {
+
+                Thread.currentThread().interrupt();
+
+                }
+                */
+
                 /* Build the gRPC response using the model data. */
                 QualityResponse response = QualityResponse.newBuilder()
                         .setPhLevel(waterQuality.getPhLevel())

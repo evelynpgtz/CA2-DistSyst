@@ -28,6 +28,7 @@ import com.evelyn.proto.leakdetection.LeakUpdate;
 import com.evelyn.proto.leakdetection.LeakAlert;
 
 import javax.jmdns.ServiceInfo;
+import java.util.concurrent.TimeUnit;
 
 /* This class creates the gRPC client connection. */
 public class GrpcClient {
@@ -92,7 +93,8 @@ public class GrpcClient {
         waterQualityStub =
                 WaterQualityServiceGrpc
                         .newBlockingStub(channel)
-                        .withInterceptors(metadataInterceptor);
+                        .withInterceptors(metadataInterceptor)
+                        .withDeadlineAfter(3, TimeUnit.SECONDS);
 
         waterQualityAsyncStub =
                 WaterQualityServiceGrpc
@@ -103,7 +105,8 @@ public class GrpcClient {
         waterConsumptionStub =
         WaterConsumptionServiceGrpc
                 .newBlockingStub(channel)
-                .withInterceptors(metadataInterceptor);
+                .withInterceptors(metadataInterceptor)
+                .withDeadlineAfter(3, TimeUnit.SECONDS);
 
         waterConsumptionAsyncStub =
         WaterConsumptionServiceGrpc
@@ -114,7 +117,8 @@ public class GrpcClient {
         leakDetectionStub =
         LeakDetectionServiceGrpc
                 .newBlockingStub(channel)
-                .withInterceptors(metadataInterceptor);
+                .withInterceptors(metadataInterceptor)
+                .withDeadlineAfter(3, TimeUnit.SECONDS);
 
         leakDetectionAsyncStub =
         LeakDetectionServiceGrpc
@@ -241,7 +245,8 @@ public class GrpcClient {
         waterQualityStub =
         WaterQualityServiceGrpc
                 .newBlockingStub(channel)
-                .withInterceptors(metadataInterceptor);
+                .withInterceptors(metadataInterceptor)
+                .withDeadlineAfter(3, TimeUnit.SECONDS);
 
         waterQualityAsyncStub =
                 WaterQualityServiceGrpc
@@ -252,7 +257,8 @@ public class GrpcClient {
         waterConsumptionStub =
         WaterConsumptionServiceGrpc
                 .newBlockingStub(channel)
-                .withInterceptors(metadataInterceptor);
+                .withInterceptors(metadataInterceptor)
+                .withDeadlineAfter(3, TimeUnit.SECONDS);
 
         waterConsumptionAsyncStub =
         WaterConsumptionServiceGrpc
@@ -263,7 +269,8 @@ public class GrpcClient {
         leakDetectionStub =
         LeakDetectionServiceGrpc
                 .newBlockingStub(channel)
-                .withInterceptors(metadataInterceptor);
+                .withInterceptors(metadataInterceptor)
+                .withDeadlineAfter(3, TimeUnit.SECONDS);
 
         leakDetectionAsyncStub =
         LeakDetectionServiceGrpc
