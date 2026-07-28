@@ -10,7 +10,6 @@ import com.evelyn.proto.leakdetection.LeakDetectionServiceGrpc;
 
 import com.evelyn.proto.waterquality.QualityRequest;
 import com.evelyn.proto.waterquality.QualityResponse;
-
 import com.evelyn.proto.waterquality.QualityData;
 import com.evelyn.proto.waterquality.UpdateResponse;
 
@@ -21,7 +20,6 @@ import com.evelyn.proto.waterconsumption.ConsumptionSummary;
 
 import com.evelyn.proto.leakdetection.LeakRequest;
 import com.evelyn.proto.leakdetection.LeakResponse;
-
 
 import javax.jmdns.ServiceInfo;
 
@@ -57,23 +55,19 @@ public class GrpcClient {
                 .forAddress(host, port)
                 .usePlaintext()
                 .build();
-        
+
         /* Create the Water Quality stub. */
         waterQualityStub = WaterQualityServiceGrpc.newBlockingStub(channel);
-
         waterQualityAsyncStub = WaterQualityServiceGrpc.newStub(channel);
-
 
         /* Create the Water Consumption stub. */
         waterConsumptionStub = WaterConsumptionServiceGrpc.newBlockingStub(channel);
-
         waterConsumptionAsyncStub = WaterConsumptionServiceGrpc.newStub(channel);
-
 
         /* Create the Leak Detection stub. */
         leakDetectionStub = LeakDetectionServiceGrpc.newBlockingStub(channel);
-
         leakDetectionAsyncStub = LeakDetectionServiceGrpc.newStub(channel);
+
     }
 
     /* Gets the current water quality information. */
@@ -120,6 +114,15 @@ public class GrpcClient {
 
     }
 
+    /* Starts the client streaming for water consumption records. */
+    public StreamObserver<ConsumptionRecord> uploadConsumptionRecords(
+            StreamObserver<ConsumptionSummary> responseObserver) {
+
+        /* Send the client streaming request to the server. */
+        return waterConsumptionAsyncStub.uploadConsumptionRecords(responseObserver);
+
+    }
+
     /* Reports a leak to the server. */
     public LeakResponse reportLeak(String location, int severity) {
 
@@ -147,19 +150,14 @@ public class GrpcClient {
 
         /* Create the Water Quality stub. */
         waterQualityStub = WaterQualityServiceGrpc.newBlockingStub(channel);
-
         waterQualityAsyncStub = WaterQualityServiceGrpc.newStub(channel);
-
 
         /* Create the Water Consumption stub. */
         waterConsumptionStub = WaterConsumptionServiceGrpc.newBlockingStub(channel);
-
         waterConsumptionAsyncStub = WaterConsumptionServiceGrpc.newStub(channel);
-
 
         /* Create the Leak Detection stub. */
         leakDetectionStub = LeakDetectionServiceGrpc.newBlockingStub(channel);
-
         leakDetectionAsyncStub = LeakDetectionServiceGrpc.newStub(channel);
 
     }
