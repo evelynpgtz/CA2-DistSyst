@@ -21,6 +21,10 @@ import com.evelyn.client.GrpcClient;
 import com.evelyn.client.ServiceDiscovery;
 
 import com.evelyn.proto.waterquality.QualityResponse;
+import com.evelyn.proto.waterquality.QualityData;
+import com.evelyn.proto.waterquality.UpdateResponse;
+import io.grpc.stub.StreamObserver;
+import com.evelyn.proto.waterquality.QualityRequest;
 
 import javax.jmdns.ServiceInfo;
 
@@ -61,7 +65,6 @@ public class WaterQualityPanel extends JPanel {
             temperatureField = new JTextField(10);
             turbidityField = new JTextField(10);
             safeCheckBox = new JCheckBox();
-            safeCheckBox.setEnabled(false);
 
             getQualityButton = new JButton("Get Quality");
             updateQualityButton = new JButton("Update Quality");
@@ -137,6 +140,30 @@ public class WaterQualityPanel extends JPanel {
                 }
 
             });
+
+            /* Add the Update Quality button action. */
+            updateQualityButton.addActionListener(new ActionListener() {
+
+                @Override
+                public void actionPerformed(ActionEvent e) {
+
+                    updateWaterQuality();
+
+                }
+
+            });
+
+            /* Add the Stream Updates button action. */
+            streamButton.addActionListener(new ActionListener() {
+
+                @Override
+                public void actionPerformed(ActionEvent e) {
+
+                    streamWaterQuality();
+
+                }
+
+            });
         }
 
         /* Loads the current water quality information. */
@@ -173,6 +200,120 @@ public class WaterQualityPanel extends JPanel {
 
                 /* Close the client connection. */
                 client.shutdown();
+
+            } catch (Exception e) {
+
+                outputArea.setText("Error: " + e.getMessage());
+
+            }
+
+        }
+
+        /* Updates the current water quality information. */
+        private void updateWaterQuality() {
+
+            try {
+
+                /* Discover the Water Quality service. */
+                ServiceDiscovery discovery = new ServiceDiscovery();
+
+                ServiceInfo serviceInfo =
+                        discovery.discoverService("_waterquality._tcp.local.");
+
+                if (serviceInfo == null) {
+
+                    outputArea.setText("Water Quality Service not found.");
+                    return;
+
+                }
+
+                /* Create the gRPC client. */
+                GrpcClient client = new GrpcClient(serviceInfo);
+
+                /* Create the request message. */
+                QualityData request = QualityData.newBuilder()
+                        .setSensorId(sensorIdField.getText())
+                        .setPhLevel(Double.parseDouble(phField.getText()))
+                        .setTemperature(Double.parseDouble(temperatureField.getText()))
+                        .setTurbidity(Double.parseDouble(turbidityField.getText()))
+                        .setSafe(safeCheckBox.isSelected())
+                        .build();
+
+                /* Send the update request. */
+                UpdateResponse response = client.updateQuality(request);
+
+                /* Display the server response. */
+                outputArea.setText(response.getMessage());
+
+                /* Close the client connection. */
+                client.shutdown();
+
+            } catch (Exception e) {
+
+                outputArea.setText("Error: " + e.getMessage());
+
+            }
+
+        }
+
+        /* Starts the water quality streaming service. */
+        private void streamWaterQuality() {
+
+            try {
+
+                /* Discover the Water Quality service. */
+                ServiceDiscovery discovery = new ServiceDiscovery();
+
+                ServiceInfo serviceInfo =
+                        discovery.discoverService("_waterquality._tcp.local.");
+
+                if (serviceInfo == null) {
+
+                    outputArea.setText("Water Quality Service not found.");
+                    return;
+
+                }
+
+                /* Create the gRPC client. */
+                GrpcClient client = new GrpcClient(serviceInfo);
+
+                /* Create the request message. */
+                QualityRequest request = QualityRequest.newBuilder()
+                        .setSensorId(sensorIdField.getText())
+                        .build();
+
+                /* Start receiving stream updates. */
+                client.streamQualityUpdates(request, new StreamObserver<QualityResponse>() {
+
+                    @Override
+                    public void onNext(QualityResponse response) {
+
+                        phField.setText(String.valueOf(response.getPhLevel()));
+                        temperatureField.setText(String.valueOf(response.getTemperature()));
+                        turbidityField.setText(String.valueOf(response.getTurbidity()));
+                        safeCheckBox.setSelected(response.getSafe());
+
+                        outputArea.append("Streaming update received.\n");
+
+                    }
+
+                    @Override
+                    public void onError(Throwable throwable) {
+
+                        outputArea.append("Streaming error.\n");
+
+                    }
+
+                    @Override
+                    public void onCompleted() {
+
+                        outputArea.append("Streaming finished.\n");
+
+                        client.shutdown();
+
+                    }
+
+                });
 
             } catch (Exception e) {
 

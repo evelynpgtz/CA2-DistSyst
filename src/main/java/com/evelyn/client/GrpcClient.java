@@ -2,6 +2,7 @@ package com.evelyn.client;
 
 import io.grpc.ManagedChannel;
 import io.grpc.ManagedChannelBuilder;
+import io.grpc.stub.StreamObserver;
 
 import com.evelyn.proto.waterquality.WaterQualityServiceGrpc;
 import com.evelyn.proto.waterconsumption.WaterConsumptionServiceGrpc;
@@ -93,6 +94,16 @@ public class GrpcClient {
 
         /* Send the request to the server. */
         return waterQualityStub.updateQuality(qualityData);
+
+    }
+
+    /* Starts the water quality streaming service. */
+    public void streamQualityUpdates(
+            QualityRequest request,
+            StreamObserver<QualityResponse> responseObserver) {
+
+        /* Send the streaming request to the server. */
+        waterQualityAsyncStub.streamQualityUpdates(request, responseObserver);
 
     }
 
