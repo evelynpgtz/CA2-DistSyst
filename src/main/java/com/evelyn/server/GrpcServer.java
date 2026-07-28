@@ -6,6 +6,7 @@ import com.evelyn.service.WaterQualityServiceImpl;
 
 import io.grpc.Server;
 import io.grpc.ServerBuilder;
+import io.grpc.ServerInterceptors;
 
 /* This class creates and starts the gRPC server.
  * It hosts all the project services. */
@@ -23,13 +24,22 @@ public class GrpcServer {
         server = ServerBuilder.forPort(PORT)
 
                 /* Register the Water Quality service. */
-                .addService(new WaterQualityServiceImpl())
+                .addService(
+                        ServerInterceptors.intercept(
+                                new WaterQualityServiceImpl(),
+                                new MetadataInterceptor()))
 
                 /* Register the Water Consumption service. */
-                .addService(new WaterConsumptionServiceImpl())
+                .addService(
+                        ServerInterceptors.intercept(
+                                new WaterConsumptionServiceImpl(),
+                                new MetadataInterceptor()))
 
                 /* Register the Leak Detection service. */
-                .addService(new LeakDetectionServiceImpl())
+                .addService(
+                        ServerInterceptors.intercept(
+                                new LeakDetectionServiceImpl(),
+                                new MetadataInterceptor()))
 
                 .build();
     }

@@ -1,7 +1,10 @@
 package com.evelyn.client;
 
+import io.grpc.ClientInterceptor;
 import io.grpc.ManagedChannel;
 import io.grpc.ManagedChannelBuilder;
+import io.grpc.Metadata;
+import io.grpc.stub.MetadataUtils;
 import io.grpc.stub.StreamObserver;
 
 import com.evelyn.proto.waterquality.WaterQualityServiceGrpc;
@@ -59,17 +62,58 @@ public class GrpcClient {
                 .usePlaintext()
                 .build();
 
-        /* Create the Water Quality stub. */
-        waterQualityStub = WaterQualityServiceGrpc.newBlockingStub(channel);
-        waterQualityAsyncStub = WaterQualityServiceGrpc.newStub(channel);
+        /* Create the metadata. */
+        Metadata metadata = new Metadata();
 
-        /* Create the Water Consumption stub. */
-        waterConsumptionStub = WaterConsumptionServiceGrpc.newBlockingStub(channel);
-        waterConsumptionAsyncStub = WaterConsumptionServiceGrpc.newStub(channel);
+        Metadata.Key<String> clientKey =
+                Metadata.Key.of(
+                        "client-name",
+                        Metadata.ASCII_STRING_MARSHALLER);
 
-        /* Create the Leak Detection stub. */
-        leakDetectionStub = LeakDetectionServiceGrpc.newBlockingStub(channel);
-        leakDetectionAsyncStub = LeakDetectionServiceGrpc.newStub(channel);
+        Metadata.Key<String> userKey =
+                Metadata.Key.of(
+                        "user-name",
+                        Metadata.ASCII_STRING_MARSHALLER);
+
+        metadata.put(clientKey, "SmartWaterGUI");
+        metadata.put(userKey, "CommunityOperator");
+
+        /* Create the metadata interceptor. */
+        ClientInterceptor metadataInterceptor =
+        MetadataUtils.newAttachHeadersInterceptor(metadata);
+
+        /* Create the Water Quality stubs. */
+        waterQualityStub =
+                WaterQualityServiceGrpc
+                        .newBlockingStub(channel)
+                        .withInterceptors(metadataInterceptor);
+
+        waterQualityAsyncStub =
+                WaterQualityServiceGrpc
+                        .newStub(channel)
+                        .withInterceptors(metadataInterceptor);
+
+        /* Create the Water Consumption stubs. */
+        waterConsumptionStub =
+        WaterConsumptionServiceGrpc
+                .newBlockingStub(channel)
+                .withInterceptors(metadataInterceptor);
+
+        waterConsumptionAsyncStub =
+        WaterConsumptionServiceGrpc
+                .newStub(channel)
+                .withInterceptors(metadataInterceptor);
+
+        /* Create the Leak Detection stubs. */
+        leakDetectionStub =
+        LeakDetectionServiceGrpc
+                .newBlockingStub(channel)
+                .withInterceptors(metadataInterceptor);
+
+        leakDetectionAsyncStub =
+        LeakDetectionServiceGrpc
+                .newStub(channel)
+                .withInterceptors(metadataInterceptor);
 
     }
 
@@ -160,17 +204,58 @@ public class GrpcClient {
                 .usePlaintext()
                 .build();
 
-        /* Create the Water Quality stub. */
-        waterQualityStub = WaterQualityServiceGrpc.newBlockingStub(channel);
-        waterQualityAsyncStub = WaterQualityServiceGrpc.newStub(channel);
+        /* Create the metadata. */
+        Metadata metadata = new Metadata();
 
-        /* Create the Water Consumption stub. */
-        waterConsumptionStub = WaterConsumptionServiceGrpc.newBlockingStub(channel);
-        waterConsumptionAsyncStub = WaterConsumptionServiceGrpc.newStub(channel);
+        Metadata.Key<String> clientKey =
+                Metadata.Key.of(
+                        "client-name",
+                        Metadata.ASCII_STRING_MARSHALLER);
 
-        /* Create the Leak Detection stub. */
-        leakDetectionStub = LeakDetectionServiceGrpc.newBlockingStub(channel);
-        leakDetectionAsyncStub = LeakDetectionServiceGrpc.newStub(channel);
+        Metadata.Key<String> userKey =
+                Metadata.Key.of(
+                        "user-name",
+                        Metadata.ASCII_STRING_MARSHALLER);
+
+        metadata.put(clientKey, "SmartWaterGUI");
+        metadata.put(userKey, "CommunityOperator");
+        
+        /* Create the metadata interceptor. */
+        ClientInterceptor metadataInterceptor =
+        MetadataUtils.newAttachHeadersInterceptor(metadata);
+
+        /* Create the Water Quality stubs. */
+        waterQualityStub =
+        WaterQualityServiceGrpc
+                .newBlockingStub(channel)
+                .withInterceptors(metadataInterceptor);
+
+        waterQualityAsyncStub =
+                WaterQualityServiceGrpc
+                        .newStub(channel)
+                        .withInterceptors(metadataInterceptor);
+
+        /* Create the Water Consumption stubs. */
+        waterConsumptionStub =
+        WaterConsumptionServiceGrpc
+                .newBlockingStub(channel)
+                .withInterceptors(metadataInterceptor);
+
+        waterConsumptionAsyncStub =
+        WaterConsumptionServiceGrpc
+                .newStub(channel)
+                .withInterceptors(metadataInterceptor);
+
+        /* Create the Leak Detection stubs. */
+        leakDetectionStub =
+        LeakDetectionServiceGrpc
+                .newBlockingStub(channel)
+                .withInterceptors(metadataInterceptor);
+
+        leakDetectionAsyncStub =
+        LeakDetectionServiceGrpc
+                .newStub(channel)
+                .withInterceptors(metadataInterceptor);
 
     }
 
