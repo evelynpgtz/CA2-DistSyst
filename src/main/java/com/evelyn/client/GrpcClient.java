@@ -75,8 +75,14 @@ public class GrpcClient {
                         "user-name",
                         Metadata.ASCII_STRING_MARSHALLER);
 
+        Metadata.Key<String> apiKey =
+                Metadata.Key.of(
+                        "api-key",
+                        Metadata.ASCII_STRING_MARSHALLER);
+
         metadata.put(clientKey, "SmartWaterGUI");
         metadata.put(userKey, "CommunityOperator");
+        metadata.put(apiKey, "smart-water-key");
 
         /* Create the metadata interceptor. */
         ClientInterceptor metadataInterceptor =
@@ -216,9 +222,16 @@ public class GrpcClient {
                 Metadata.Key.of(
                         "user-name",
                         Metadata.ASCII_STRING_MARSHALLER);
+        
+        Metadata.Key<String> apiKey =
+                Metadata.Key.of(
+                        "api-key",
+                        Metadata.ASCII_STRING_MARSHALLER);
+        
 
         metadata.put(clientKey, "SmartWaterGUI");
         metadata.put(userKey, "CommunityOperator");
+        metadata.put(apiKey, "smart-water-key");
         
         /* Create the metadata interceptor. */
         ClientInterceptor metadataInterceptor =
