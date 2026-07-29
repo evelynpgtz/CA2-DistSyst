@@ -20,6 +20,18 @@ public class WaterQualityServiceImpl extends WaterQualityServiceGrpc.WaterQualit
         @Override
         public void getCurrentQuality(QualityRequest request,
                                         StreamObserver<QualityResponse> responseObserver) {
+                
+                /* Check if the sensor exists. */
+                if (!request.getSensorId().equals("Sensor-001")) {
+
+                        responseObserver.onError(
+                                io.grpc.Status.NOT_FOUND
+                                        .withDescription("Sensor not found.")
+                                        .asRuntimeException());
+
+                        return;
+
+                }
 
                 /* Create a sample water quality object. */
                 WaterQuality waterQuality = new WaterQuality(
