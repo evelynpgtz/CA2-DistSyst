@@ -104,6 +104,14 @@ public class WaterQualityServiceImpl extends WaterQualityServiceGrpc.WaterQualit
         /* Send five sample updates. */
         for (int i = 0; i < 5; i++) {
 
+                /* Check if the client cancelled the request. */
+                if (io.grpc.Context.current().isCancelled()) {
+
+                        System.out.println("Client cancelled the stream.");
+
+                        return;
+                }
+
                 /* Create a sample response. */
                 QualityResponse response = QualityResponse.newBuilder()
                         .setPhLevel(7.2 + (i * 0.1))

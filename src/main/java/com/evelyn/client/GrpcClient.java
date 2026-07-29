@@ -279,13 +279,24 @@ public class GrpcClient {
 
     }
 
-    /* Closes the communication channel. */
-    public void shutdown() {
+        /* Closes the communication channel. */
+        public void shutdown() {
 
-        if (channel != null) {
-            channel.shutdown();
+                if (channel != null) {
+                channel.shutdown();
+                }
+
         }
 
-    }
+        /* Cancels the current streaming request. */
+                public void cancelStream() {
+
+                if (channel != null) {
+
+                        channel.shutdownNow();
+
+                }
+
+        }
 
 }

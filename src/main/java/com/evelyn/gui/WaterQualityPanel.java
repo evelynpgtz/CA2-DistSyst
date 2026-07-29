@@ -44,9 +44,13 @@ public class WaterQualityPanel extends JPanel {
         private JButton getQualityButton;
         private JButton updateQualityButton;
         private JButton streamButton;
+        private JButton stopStreamButton;
 
         /* Output area. */
         private JTextArea outputArea;
+
+        /* gRPC client used by the panel. */
+        private GrpcClient client;
 
         /* Creates the Water Quality panel. */
         public WaterQualityPanel() {
@@ -69,6 +73,7 @@ public class WaterQualityPanel extends JPanel {
             getQualityButton = new JButton("Get Quality");
             updateQualityButton = new JButton("Update Quality");
             streamButton = new JButton("Stream Updates");
+            stopStreamButton = new JButton("Stop Stream");
 
             outputArea = new JTextArea(12, 45);
             outputArea.setEditable(false);
@@ -121,6 +126,9 @@ public class WaterQualityPanel extends JPanel {
             gbc.gridx = 2;
             formPanel.add(streamButton, gbc);
 
+            gbc.gridx = 3;
+            formPanel.add(stopStreamButton, gbc);
+
             /* Create the results area. */
             JScrollPane scrollPane = new JScrollPane(outputArea);
             scrollPane.setBorder(BorderFactory.createTitledBorder("Results"));
@@ -164,6 +172,24 @@ public class WaterQualityPanel extends JPanel {
                 }
 
             });
+
+            /* Add the Stop Stream button action. */
+            stopStreamButton.addActionListener(new ActionListener() {
+
+                @Override
+                public void actionPerformed(ActionEvent e) {
+
+                    if (client != null) {
+
+                        client.cancelStream();
+
+                        outputArea.append("Stream cancelled.\n");
+
+                    }
+
+                }
+
+            });
         }
 
         /* Loads the current water quality information. */
@@ -184,7 +210,7 @@ public class WaterQualityPanel extends JPanel {
                 }
 
                 /* Create the gRPC client. */
-                GrpcClient client = new GrpcClient(serviceInfo);
+                client = new GrpcClient(serviceInfo);
 
                 /* Request the current water quality. */
                 QualityResponse response =
@@ -228,7 +254,7 @@ public class WaterQualityPanel extends JPanel {
                 }
 
                 /* Create the gRPC client. */
-                GrpcClient client = new GrpcClient(serviceInfo);
+                client = new GrpcClient(serviceInfo);
 
                 /* Create the request message. */
                 QualityData request = QualityData.newBuilder()
@@ -275,7 +301,7 @@ public class WaterQualityPanel extends JPanel {
                 }
 
                 /* Create the gRPC client. */
-                GrpcClient client = new GrpcClient(serviceInfo);
+                client = new GrpcClient(serviceInfo);
 
                 /* Create the request message. */
                 QualityRequest request = QualityRequest.newBuilder()
