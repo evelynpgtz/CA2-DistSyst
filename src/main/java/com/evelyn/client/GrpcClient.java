@@ -91,15 +91,15 @@ public class GrpcClient {
 
         /* Create the Water Quality stubs. */
         waterQualityStub =
-                WaterQualityServiceGrpc
-                        .newBlockingStub(channel)
-                        .withInterceptors(metadataInterceptor)
-                        .withDeadlineAfter(3, TimeUnit.SECONDS);
+        WaterQualityServiceGrpc
+                .newBlockingStub(channel)
+                .withInterceptors(metadataInterceptor)
+                .withDeadlineAfter(3, TimeUnit.SECONDS);
 
         waterQualityAsyncStub =
-                WaterQualityServiceGrpc
-                        .newStub(channel)
-                        .withInterceptors(metadataInterceptor);
+        WaterQualityServiceGrpc
+                .newStub(channel)
+                .withInterceptors(metadataInterceptor);
 
         /* Create the Water Consumption stubs. */
         waterConsumptionStub =
